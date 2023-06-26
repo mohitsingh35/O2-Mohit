@@ -1,12 +1,10 @@
 package com.ncs.o2.Hilt
 
-import com.google.firebase.firestore.FirebaseFirestore
 import com.ncs.o2.Domain.Interfaces.Repository
 import com.ncs.o2.Domain.Repositories.FirestoreRepository
 import com.ncs.o2.Domain.Utility.FirebaseRepository
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
@@ -36,8 +34,6 @@ abstract class RepositoryModule {
     @Binds
     @FirebaseRepository
     abstract fun bindsRepository(firestoreRepository: FirestoreRepository): Repository
-
-
 
 
 }

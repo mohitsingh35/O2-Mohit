@@ -48,6 +48,7 @@
             android:id="@+id/parent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/darkbg_main"
             android:orientation="vertical">
 
 
@@ -228,7 +229,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/card_view_background_green_outline"
+                    android:background="@drawable/card_view_background_purple_outline"
                     android:elevation="6dp"
                     android:fontFamily="@font/outfitmedium"
                     android:orientation="vertical"
@@ -247,7 +248,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/card_view_background_green_outline"
+                    android:background="@drawable/card_view_background_purple_outline"
                     android:elevation="6dp"
                     android:fontFamily="@font/outfitmedium"
                     android:gravity="center"
