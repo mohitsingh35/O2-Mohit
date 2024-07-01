@@ -1,8 +1,17 @@
 package com.ncs.o2.Domain.Models
 
 import android.graphics.Color
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverter
+import androidx.room.TypeConverters
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable.VersionField
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.Exclude
-import com.google.firebase.firestore.FieldValue
+import com.ncs.o2.Domain.Utility.Version
+import com.ncs.o2.HelperClasses.Convertors
+import com.ncs.versa.Constants.Endpoints
+import java.sql.Time
 
 /*
 File : Task.kt -> com.ncs.o2.Models
@@ -21,68 +30,36 @@ Tasks FEATURE MUST HAVE :
 Tasks FUTURE ADDITION :
 
 */
+
+// Todo Remove deprecated fields like assigner
+
+@Version("4")
+@Entity(tableName = Endpoints.ROOM.TASKS.TASKS_TABLE)
+@TypeConverters(Convertors::class)
 data class Task(
-    val TITLE: String = "",
-    val DESCRIPTION: String = "",
-    var ID: String,
-    val DIFFICULTY: Int = 0,
-    val LINKS: List<String> = emptyList(),
-    val PRIORITY: Int = 0,
-    val STATUS: Int = -1,
-    val ASSIGNEE: List<String> = emptyList(),
-    val ASSIGNER: String = "",
-    val DEADLINE: String = "",
-    var TIME_STAMP: FieldValue = FieldValue.serverTimestamp(),
-    val DURATION: String = "",
 
-    val TAGS: List<Tag> = listOf(),
-    val PROJECT_ID: String = "",
-    val SEGMENT: String = "",
-    val SECTION: String = "",
-    val ASSIGNEE_DP_URL : String = "",
-    val isCompleted:Boolean=false
-    ) {
+    var title: String = "",
+    var description: String = "",
+    @PrimaryKey(autoGenerate = false)
+    var id: String="",
+    var difficulty: Int = 0,
+    var priority: Int = 0,
+    var status: Int = -1,
 
-    @Exclude
-    fun getPriorityColor(): Int {
-        when (PRIORITY) {
-            1 -> return Color.GREEN
-            2 -> return Color.YELLOW
-            3 -> return Color.RED
-            else -> return Color.BLACK
-        }
-    }
+    var assignee: String = "",
+    val assigner: String = "",
+    var moderators:List<String> = listOf(),
 
-    @Exclude
-    fun getDifficultyColor(): Int {
-        when (DIFFICULTY) {
-            1 -> return Color.GREEN
-            2 -> return Color.YELLOW
-            3 -> return Color.RED
-            else -> return Color.BLACK
-        }
-    }
+    var time_STAMP: Timestamp? =null,
+    var duration: String = "",
+    var tags: List<String> = listOf(),
+    var project_ID: String = "",
+    var segment: String = "",
+    var section: String = "",
 
-    @Exclude
-    fun getDifficultyString(): String {
-        when (DIFFICULTY) {
-            1 -> return "E"
-            2 -> return "M"
-            3 -> return "H"
-            else -> return "N/A"
-        }
-    }
+    var type:Int=0,
+    val last_updated:Timestamp? = Timestamp.now(),
+    val version:Int?=5,
+    var archived:Boolean=false
+    )
 
-    @Exclude
-    fun getStatusString(): String {
-        when (STATUS) {
-            0 -> return "Unassigned"
-            1 -> return "Assigned"
-            2 -> return "In Progress"
-            3 -> return "Finished"
-            else -> return "N/A"
-        }
-    }
-
-
-}

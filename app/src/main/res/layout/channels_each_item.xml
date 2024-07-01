@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:weightSum="10"
+    android:id="@+id/parent"
+    android:paddingTop="7dp"
+    android:paddingBottom="7dp"
+    android:focusable="true"
+    android:clickable="true"
+    android:foreground="@drawable/ripplecustom"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:fontFamily="@font/sf_pro_display_medium"
+            android:text="#"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:background="@drawable/channel_button_border"
+            android:textColor="@color/primary"
+            android:textSize="17dp" />
+
+        <TextView
+            android:id="@+id/channel_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="8"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/sf_pro_display_regular"
+            android:text="Channels"
+            android:textColor="@color/subheading"
+            android:textSize="@dimen/h2" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:id="@+id/notificationCountParent"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:background="@drawable/notifications_bg">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="9"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:id="@+id/notificationCount"
+                android:gravity="center"
+                android:textColor="@color/better_white"
+                android:fontFamily="@font/sf_pro_display_semibold"
+                android:textSize="12dp"/>
+
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>

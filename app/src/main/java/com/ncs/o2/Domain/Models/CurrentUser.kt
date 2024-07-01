@@ -18,7 +18,14 @@ Tasks FUTURE ADDITION :
 
 */
 data class CurrentUser (
+            val FULLNAME:String = "",
             val EMAIL: String = "",
             val USERNAME: String = "",
-            val PROJECTS: List<String> = listOf()
-        )
+            val PROJECTS: List<String> = listOf(),
+            val BIO:String="",
+            val DESIGNATION:String="",
+            val ROLE:Long=1,
+            val DP_URL:String?=null,
+            val FCM_TOKEN: String="",
+            val NOTIFICATION_LAST_SEEN : Long = 0
+)

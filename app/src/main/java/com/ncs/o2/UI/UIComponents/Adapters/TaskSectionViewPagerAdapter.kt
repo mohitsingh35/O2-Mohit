@@ -2,6 +2,7 @@ package com.ncs.o2.UI.UIComponents.Adapters
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.ncs.o2.HelperClasses.PrefManager
 import com.ncs.o2.UI.Tasks.Sections.TaskSectionFragment
 
 /*
@@ -22,7 +23,7 @@ Tasks FUTURE ADDITION :
 
 
 */
-class TaskSectionViewPagerAdapter(fragmentActivity: Fragment, private var totalCount: Int) :
+class TaskSectionViewPagerAdapter(fragmentActivity: Fragment, private var totalCount: Int,private var sectionsList:MutableList<String>) :
     FragmentStateAdapter(fragmentActivity) {
 
     override fun getItemCount(): Int {
@@ -30,12 +31,10 @@ class TaskSectionViewPagerAdapter(fragmentActivity: Fragment, private var totalC
     }
 
     override fun createFragment(position: Int): Fragment {
-        return when (position) {
-            0 -> TaskSectionFragment()
-            1 -> TaskSectionFragment()
-            2 -> TaskSectionFragment()
-            else -> TaskSectionFragment()
+        if (position < sectionsList.size) {
+            return TaskSectionFragment.newInstance(sectionsList[position])
         }
-
+        return TaskSectionFragment.newInstance("")
     }
+
 }

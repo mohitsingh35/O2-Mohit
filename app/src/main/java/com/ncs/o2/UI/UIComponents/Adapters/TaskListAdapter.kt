@@ -1,133 +1,182 @@
-package com.ncs.o2.UI.UIComponents.Adapters
-
-import android.graphics.drawable.Drawable
+import android.app.Activity
+import android.content.Context
+import android.content.res.Resources
+import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.graphics.Paint
+import androidx.core.content.res.ResourcesCompat
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.Target
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayoutManager
+import com.ncs.o2.Constants.SwitchFunctions
+import com.ncs.o2.Data.Room.TasksRepository.TasksDatabase
+import com.ncs.o2.Domain.Models.ServerResult
+import com.ncs.o2.Domain.Models.Tag
 import com.ncs.o2.Domain.Models.Task
-import com.ncs.o2.Domain.Utility.ExtensionsUtil.gone
+import com.ncs.o2.Domain.Models.TaskItem
+import com.ncs.o2.Domain.Models.User
+import com.ncs.o2.Domain.Repositories.FirestoreRepository
+import com.ncs.o2.Domain.Utility.DateTimeUtils
+import com.ncs.o2.Domain.Utility.ExtensionsUtil.isNull
+import com.ncs.o2.Domain.Utility.ExtensionsUtil.loadProfileImg
 import com.ncs.o2.Domain.Utility.ExtensionsUtil.setOnClickFadeInListener
 import com.ncs.o2.R
+import com.ncs.o2.UI.UIComponents.Adapters.TagAdapterHomeScreen
 import com.ncs.o2.databinding.TaskItemBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import timber.log.Timber
 
-/*
-File : TaskListAdapter.kt -> com.ncs.o2.UI.Tasks.TaskList
-Description : Adapter class for Task page 
+class TaskListAdapter(val repository: FirestoreRepository,val context: Context,val taskList:MutableList<TaskItem>,val db:TasksDatabase) : RecyclerView.Adapter<TaskListAdapter.TaskItemViewHolder>(){
 
-Author : Alok Ranjan (VC uname : apple)
-Link : https://github.com/arpitmx
-From : Bitpolarity x Noshbae (@Project : O2 Android)
 
-Creation : 1:40 pm on 31/05/23
-
-Todo >
-Tasks CLEAN CODE :
-Tasks BUG FIXES :
-Tasks FEATURE MUST HAVE :
-Tasks FUTURE ADDITION :
-
-*/
-class TaskListAdapter(
-) : RecyclerView.Adapter<ViewHolder>() {
-
+    private val selectedTags = mutableListOf<Tag>()
     private var onClickListener: OnClickListener? = null
-    private var taskList: ArrayList<Task>? = null
 
 
     inner class TaskItemViewHolder(private val binding: TaskItemBinding) :
-        ViewHolder(binding.root) {
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(task: TaskItem,user: User) {
+            if (user.profileDPUrl!=null &&(context as? Activity)?.isDestroyed != true) {
+
+                binding.asigneeDp.loadProfileImg(user.profileDPUrl.toString())
+            }else{
+                binding.asigneeDp.setImageDrawable(context.getDrawable(R.drawable.profile_pic_placeholder))
+            }
 
 
-        fun bind(task: Task) {
-            Glide.with(binding.root)
-                .load(task.ASSIGNEE_DP_URL)
-                .listener(object : RequestListener<Drawable> {
-
-                    override fun onLoadFailed(
-                        e: GlideException?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        binding.progressBar.gone()
-                        return false
-                    }
-
-                    override fun onResourceReady(
-                        resource: Drawable?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        dataSource: DataSource?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        binding.progressBar.gone()
-                        return false
-                    }
-                })
-                .encodeQuality(80)
-                .override(40,40)
-                .apply(
-                    RequestOptions().
-                    diskCacheStrategy(DiskCacheStrategy.ALL)
-
-                )
-                .error(R.drawable.profile_pic_placeholder)
-                .into(binding.asigneeDp)
-
-            if (task.isCompleted){
+            if (task.completed){
                 binding.taskId.paintFlags=binding.taskId.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                 binding.taskTitle.paintFlags=binding.taskTitle.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-
-
             }
-            binding.taskDuration.text= "about "+task.DURATION+" hours ago"
-            binding.taskId.text = task.ID
-            binding.taskTitle.text = task.TITLE
+
+            binding.taskDuration.text = DateTimeUtils.getTimeAgo(task.timestamp!!.seconds)
+            binding.taskId.text = task.id
+            binding.taskTitle.text = task.title
             binding.difficulty.text = task.getDifficultyString()
-            binding.difficulty.setBackgroundColor(task.getDifficultyColor())
 
+            when (task.difficulty){
+                1 -> binding.difficulty.background= ResourcesCompat.getDrawable(context.resources,R.drawable.label_cardview_green,null)
+                2 -> binding.difficulty.background= ResourcesCompat.getDrawable(context.resources,R.drawable.label_cardview_yellow,null)
+                3 -> binding.difficulty.background= ResourcesCompat.getDrawable(context.resources,R.drawable.label_cardview_red,null)
+            }
 
+            CoroutineScope(Dispatchers.IO).launch {
 
+                val iterator = task.tagList.iterator()
+                while (iterator.hasNext()) {
+                    val tagId = iterator.next()
+                    val tag = db.tagsDao().getTagbyId(tagId)
+
+                    if (!tag.isNull) {
+                        tag?.checked = true
+
+                        synchronized(selectedTags) {
+                            selectedTags.add(tag!!)
+                        }
+                    }
+                }
+
+                withContext(Dispatchers.Main) {
+                    setTagsView(selectedTags.toList().toMutableList(), binding, task)
+                }
+            }
+        }
+    }
+
+    private fun setTagsView(list: MutableList<Tag>, binding: TaskItemBinding, task: TaskItem) {
+        val tagIdSet = HashSet(task.tagList)
+
+        synchronized(list) {
+            val iterator = list.iterator()
+
+            while (iterator.hasNext()) {
+                val tag = iterator.next()
+                if (!tagIdSet.contains(tag?.tagID)) {
+                    iterator.remove()
+                }
+            }
         }
 
+        val finalList = list.distinctBy { it.tagID }
+        val tagsRecyclerView = binding.tagRecyclerView
+        val layoutManager = FlexboxLayoutManager(context)
 
+        layoutManager.flexDirection = FlexDirection.ROW
+        layoutManager.flexWrap = FlexWrap.WRAP
+        tagsRecyclerView.layoutManager = layoutManager
+        val adapter = TagAdapterHomeScreen(finalList)
+        tagsRecyclerView.adapter = adapter
+    }
+
+    fun setTaskList(newTaskList: List<TaskItem>) {
+        val diffCallback = TaskDiffCallback(taskList, newTaskList)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        taskList.clear()
+        taskList.addAll(newTaskList)
+        diffResult.dispatchUpdatesTo(this)
+    }
+
+    fun updateTaskList(newList: List<TaskItem>) {
+        val diffResult = DiffUtil.calculateDiff(TaskDiffCallback(taskList, newList))
+        taskList.clear()
+        taskList.addAll(newList)
+        diffResult.dispatchUpdatesTo(this)
+    }
+    fun setTasks(newTaskList: List<Task>) {
+        val taskItems: List<TaskItem> = newTaskList.map { task ->
+            TaskItem(
+                title = task.title!!,
+                id = task.id,
+                assignee_id = task.assignee!!,
+                difficulty = task.difficulty!!,
+                timestamp = task.time_STAMP,
+                completed = if (SwitchFunctions.getStringStateFromNumState(task.status!!)=="Completed") true else false,
+                tagList = task.tags
+            )
+        }
+        val diffCallback = TaskDiffCallback(taskList, taskItems)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        taskList.clear()
+        taskList.addAll(taskItems)
+        diffResult.dispatchUpdatesTo(this)
+        notifyDataSetChanged()
     }
 
 
-    fun setTaskList(newTaskList: ArrayList<Task>){
-        this.taskList = newTaskList
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskItemViewHolder {
         val binding = TaskItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return TaskItemViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
-        return taskList!!.size
+        return taskList.size
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        when (holder) {
-            is TaskItemViewHolder -> {
-                holder.bind(taskList!![position])
+    override fun onBindViewHolder(holder: TaskItemViewHolder, position: Int) {
 
-                holder.itemView.setOnClickFadeInListener {
-                    if (onClickListener != null) {
-                        onClickListener!!.onCLick(position, taskList!![position])
-                    }
-                }
+        fetchAssigneeDetails(taskList[position].assignee_id) { user ->
+            holder.bind(taskList[position], user)
+        }
+
+        holder.itemView.setOnClickFadeInListener {
+            if (onClickListener != null) {
+                onClickListener!!.onCLick(position, taskList[position])
             }
         }
+        holder.itemView.setOnLongClickListener {
+            if (onClickListener != null) {
+                onClickListener!!.onLongClick(position, taskList[position])
+            }
+            true
+        }
+
+
     }
 
     fun setOnClickListener(onClickListener: OnClickListener) {
@@ -135,7 +184,69 @@ class TaskListAdapter(
     }
 
     interface OnClickListener {
-        fun onCLick(position: Int, task: Task)
+        fun onCLick(position: Int, task: TaskItem)
+
+        fun onLongClick(position: Int,task: TaskItem)
+    }
+
+    private class TaskDiffCallback(private val oldList: List<TaskItem>, private val newList: List<TaskItem>) : DiffUtil.Callback() {
+
+        override fun getOldListSize(): Int {
+            return oldList.size
+        }
+
+        override fun getNewListSize(): Int {
+            return newList.size
+        }
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            val oldTask = oldList[oldItemPosition]
+            val newTask = newList[newItemPosition]
+            return oldTask.id == newTask.id
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            val oldTask = oldList[oldItemPosition]
+            val newTask = newList[newItemPosition]
+            return oldTask == newTask
+        }
+    }
+    private fun fetchAssigneeDetails(assigneeId: String, onUserFetched: (User) -> Unit) {
+        if (assigneeId!="None" && assigneeId!="") {
+            repository.getUserInfobyId(assigneeId) { result ->
+                when (result) {
+                    is ServerResult.Success -> {
+                        val user = result.data
+                        if (user != null) {
+                            onUserFetched(user)
+                        }
+                    }
+
+                    is ServerResult.Failure -> {
+
+                    }
+
+                    is ServerResult.Progress -> {
+
+                    }
+
+                    else -> {}
+                }
+            }
+        }else{
+            onUserFetched(User(
+                firebaseID = null,
+                profileDPUrl = null,
+                profileIDUrl = null,
+                post = null,
+                username = null,
+                role = null,
+                timestamp = null,
+                designation = null,
+                fcmToken = null,
+                isChecked = false
+            ))
+        }
     }
 
 }

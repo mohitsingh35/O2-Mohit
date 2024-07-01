@@ -10,7 +10,7 @@
         android:id="@+id/constraintLayout2"
         android:layout_width="match_parent"
         android:layout_height="@dimen/action_bar"
-        android:background="@color/darkbg_main"
+        android:background="@color/primary_bg"
         android:elevation="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -25,10 +25,10 @@
             android:layout_marginLeft="10dp"
             android:src="@drawable/ic_back_arrow"
             android:visibility="visible"
-            android:tint="@color/primary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/primary" />
 
 
 

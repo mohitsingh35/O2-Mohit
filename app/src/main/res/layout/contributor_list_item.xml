@@ -3,12 +3,17 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
-    android:padding="8dp"
-    android:background="@color/primarybg">
+    android:padding="10dp"
+    android:foreground="@drawable/ripplecustom"
+    android:clickable="true"
+    android:focusable="true"
+   >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginStart="5dp"
+        >
 
     <ProgressBar
         android:id="@+id/progressbar"
@@ -50,15 +55,19 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:textColor="@color/better_white"
-            android:text="Alok Ranjan" />
+            android:text="Alok Ranjan"
+            android:fontFamily="@font/sf_pro_display_medium"
+            />
 
         <TextView
             android:id="@+id/userPost"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            android:textColor="@color/dim_purple"
-            android:text="Android developer" />
+            android:textColor="@color/dim_primary"
+            android:text="Android developer"
+            android:fontFamily="@font/sf_pro_display_regular"
+            />
 
     </LinearLayout>
 
@@ -67,7 +76,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:foregroundTint="@color/purple"
-        android:buttonTint="@color/grabblue"
+        android:buttonTint="@color/primary"
         />
 
 </LinearLayout>

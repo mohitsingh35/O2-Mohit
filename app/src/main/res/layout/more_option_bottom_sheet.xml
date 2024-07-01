@@ -1,0 +1,226 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/primary_bg"
+    >
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/purple"
+        />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:weightSum="10"
+        android:background="@color/primary_bg"
+        >
+
+        <ImageButton
+            android:id="@+id/close_btn"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@null"
+            android:src="@drawable/baseline_keyboard_arrow_down_24"
+            app:tint="@color/dim_primary" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="9"
+            android:fontFamily="@font/sf_pro_display_semibold"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="More"
+            android:textColor="@color/better_white"
+            android:textSize="18dp" />
+
+
+        <ImageButton
+            android:id="@+id/add_project"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:visibility="invisible"
+            android:background="@null"
+            android:src="@drawable/outline_add_24"
+            app:tint="@color/dim_primary" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/card_bg"
+        />
+
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:visibility="gone"
+        android:id="@+id/progress_bar"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="40dp"
+        android:indeterminateTint="@color/primary"/>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:visibility="visible"
+        android:background="@color/secondary_bg"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttons">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="24dp"
+        android:id="@+id/share_button"
+        android:foreground="@drawable/ripplecustom"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/share_ic"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@null"
+                android:src="@drawable/baseline_share_24"
+                app:tint="@color/dim_primary" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="16dp"
+                android:id="@+id/text_full"
+                android:gravity="center_vertical"
+                android:fontFamily="@font/sf_pro_display_medium"
+                android:text="Share Task"
+                android:textColor="@color/subheading"
+                android:textSize="@dimen/h2" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/seperator_light"
+            />
+
+    </LinearLayout>
+
+
+   <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="24dp"
+            android:id="@+id/today"
+            android:foreground="@drawable/ripplecustom"
+            android:clickable="true"
+            android:focusable="true"
+
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginBottom="15dp"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@null"
+                    android:src="@drawable/baseline_access_time_24"
+                    app:tint="@color/dim_primary" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="16dp"
+                    android:fontFamily="@font/sf_pro_display_medium"
+                    android:text="Add to Today"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/subheading"
+                    android:textSize="@dimen/h2" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="24dp"
+            android:id="@+id/btn_archiveTask"
+            android:foreground="@drawable/ripplecustom"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/archive_ic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@null"
+                    android:src="@drawable/baseline_archive_24"
+                    app:tint="@color/dim_primary" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="16dp"
+                    android:gravity="center_vertical"
+                    android:fontFamily="@font/sf_pro_display_medium"
+                    android:text="Archive Task"
+                    android:textColor="@color/subheading"
+                    android:textSize="@dimen/h2" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="15dp"
+                android:background="@color/seperator_light"
+                />
+
+        </LinearLayout>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+
+</LinearLayout>

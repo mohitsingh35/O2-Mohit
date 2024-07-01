@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UI.createProject.CreateProjectActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+        <include
+            android:id="@+id/gio_actionbar"
+            layout="@layout/actionbar_new_project"
+            android:layout_width="match_parent"
+            android:layout_height="53dp"
+            android:visibility="visible"
+            />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="15dp"
+            android:background="@color/secondary_bg"
+            >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    app:cardBackgroundColor="@color/secondaryBlue"
+                    app:cardCornerRadius="45dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleY="0.5"
+                        android:scaleX="0.5"
+                        android:layout_gravity="center"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/add_image" />
+                </androidx.cardview.widget.CardView>
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/image"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    app:cardBackgroundColor="@color/secondaryBlue"
+                    app:cardCornerRadius="45dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <EditText
+                    android:id="@+id/project_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="120dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="36dp"
+                    android:background="@drawable/item_bg_curve"
+                    android:drawablePadding="15dp"
+                    android:fontFamily="@font/sf_pro_display_medium"
+                    android:gravity="start|center_vertical"
+                    android:hint="Project Title"
+                    android:paddingStart="15dp"
+                    android:paddingBottom="1dp"
+                    android:textAllCaps="false"
+                    android:textColor="#DEE3E3E3"
+                    android:textColorHint="@color/account"
+                    android:textSize="18dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.384"
+                    app:layout_constraintStart_toEndOf="@+id/image"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <TextView
+                    android:id="@+id/errorTextTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/sf_pro_display_regular"
+                    android:text="Error"
+                    android:textColor="@color/redx"
+                    android:textSize="12dp"
+                    android:layout_marginStart="85dp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/project_title" />
+
+                <EditText
+                    android:id="@+id/project_alias"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="30dp"
+                    android:background="@drawable/item_bg_curve"
+                    android:drawablePadding="15dp"
+                    android:fontFamily="@font/sf_pro_display_medium"
+                    android:gravity="start|center_vertical"
+                    android:hint="Project Alias"
+                    android:paddingStart="15dp"
+                    android:paddingBottom="1dp"
+                    android:textAllCaps="false"
+                    android:textColor="#DEE3E3E3"
+                    android:textColorHint="@color/account"
+                    android:textSize="18dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/image" />
+
+                <TextView
+                    android:id="@+id/errorText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:visibility="gone"
+                    android:fontFamily="@font/sf_pro_display_regular"
+                    android:text="Error"
+                    android:textColor="@color/redx"
+                    android:textSize="14dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.507"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/project_alias" />
+
+                <EditText
+                    android:id="@+id/project_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="30dp"
+                    android:background="@drawable/item_bg_curve"
+                    android:drawablePadding="15dp"
+                    android:fontFamily="@font/sf_pro_display_medium"
+                    android:gravity="start|center_vertical"
+                    android:hint="Project Description"
+                    android:paddingStart="15dp"
+                    android:paddingBottom="1dp"
+                    android:textAllCaps="false"
+                    android:textColor="#DEE3E3E3"
+                    android:textColorHint="@color/account"
+                    android:textSize="18dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/errorText" />
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@font/sf_pro_display_regular"
+                    android:text="You can add an optional description for the project"
+                    android:textColor="@color/account"
+                    android:textSize="14dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.507"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/project_desc" />
+
+
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="36dp"
+                    android:indeterminateTint="@color/purple"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.498"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="260dp"
+                    android:fontFamily="@font/sf_pro_display_regular"
+                    android:gravity="center"
+                    android:text="Alias Code will be used as prefix in task id\n Be Careful while creating the alias"
+                    android:textColor="@color/account"
+                    android:textSize="14dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/project_desc" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

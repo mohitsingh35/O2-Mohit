@@ -1,5 +1,6 @@
 package com.ncs.o2.UI.UIComponents.BottomSheets
 
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,8 +14,15 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.ncs.o2.Domain.Models.User
+import com.ncs.o2.Domain.Utility.DateTimeUtils
 import com.ncs.o2.Domain.Utility.ExtensionsUtil.gone
+import com.ncs.o2.Domain.Utility.ExtensionsUtil.setOnClickThrottleBounceListener
+import com.ncs.o2.UI.MainActivity
 import com.ncs.o2.databinding.ProfileBottomSheetBinding
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 
 /*
@@ -36,7 +44,7 @@ Tasks FUTURE ADDITION :
 
 */
 class ProfileBottomSheet (
-    var dp_url: String
+    var user: User
 ) :BottomSheetDialogFragment() {
 
     lateinit var binding: ProfileBottomSheetBinding
@@ -53,7 +61,7 @@ class ProfileBottomSheet (
     override fun onViewCreated( view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Glide.with(requireContext())
-            .load(dp_url)
+            .load(user.profileDPUrl)
             .listener(object : RequestListener<Drawable> {
 
 
@@ -85,7 +93,18 @@ class ProfileBottomSheet (
 
             )
             .into(binding.roomDp)
+        binding.roomNameBs.text=user.username
+        binding.hostNameBs.text=user.firebaseID
+        val timestamp = user.timestamp?.seconds
+        binding.time.text= "Joined ${DateTimeUtils.getTimeAgo(timestamp!!)}"
+        binding.totalMembersBs.text=user.designation
 
-
+        binding.viewIssues.setOnClickThrottleBounceListener{
+            dismiss()
+            val intent = Intent(requireContext(), MainActivity::class.java)
+            intent.putExtra("search", "GoToSearch")
+            intent.putExtra("userName", user.username)
+            startActivity(intent)
+        }
     }
 }

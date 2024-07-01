@@ -5,11 +5,13 @@ import com.google.firebase.auth.FirebaseUser
 import com.ncs.o2.Domain.Interfaces.AuthRepository
 import com.ncs.o2.Domain.Models.ServerResult
 import com.ncs.o2.Domain.Utility.FirebaseUtils.awaitt
+import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 import javax.inject.Inject
 
 /*
 File : FirebaseAuthRepository.kt -> com.ncs.o2.Domain.Repositories
-Description : Repository for Firebase Auth 
+Description : Repository for Firebase Auth
 
 Author : Alok Ranjan (VC uname : apple)
 Link : https://github.com/arpitmx
@@ -27,7 +29,6 @@ Tasks FUTURE ADDITION :
 
 class FirebaseAuthRepository @Inject constructor(val firebaseAuth: FirebaseAuth) : AuthRepository {
 
-
     override val currentUser: FirebaseUser
         get() = firebaseAuth.currentUser!!
 
@@ -36,10 +37,15 @@ class FirebaseAuthRepository @Inject constructor(val firebaseAuth: FirebaseAuth)
         password: String
     ): ServerResult<FirebaseUser> {
 
+        Timber.tag("Auth Repository").d("Login try ${email} ${password}")
+
         return try {
-            val result = firebaseAuth.signInWithEmailAndPassword(email, password).awaitt()
+            val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
+            Timber.tag("Auth Repository").d("Login try - success ${result.user?.email}")
             ServerResult.Success(result.user!!)
+
         } catch (e: Exception) {
+            Timber.tag("Auth Repository").d("Login try - failure ${e.message}")
             e.printStackTrace()
             ServerResult.Failure(e)
         }

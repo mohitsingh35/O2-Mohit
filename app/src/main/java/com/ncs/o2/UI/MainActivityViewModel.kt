@@ -5,6 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ncs.o2.Domain.Interfaces.Repository
 import com.ncs.o2.Domain.Models.ServerResult
+import com.ncs.o2.Domain.Models.Tag
+import com.ncs.o2.Domain.Models.Task
+import com.ncs.o2.Domain.Models.User
+import com.ncs.o2.Domain.Repositories.FirestoreRepository
 import com.ncs.o2.Domain.UseCases.LoadSectionsUseCase
 import com.ncs.o2.Domain.Utility.FirebaseRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,7 +34,8 @@ Tasks FUTURE ADDITION :
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
     @FirebaseRepository val repository: Repository,
-    val sectionsUseCase: LoadSectionsUseCase
+    val sectionsUseCase: LoadSectionsUseCase,
+    private val firestoreRepository: FirestoreRepository
 ) :
     ViewModel() {
 
@@ -40,6 +45,9 @@ class MainActivityViewModel @Inject constructor(
     val showDialogLD: LiveData<List<String>> get() = _showdialogLD
     private val _projectListLiveData = MutableLiveData<List<String>?>()
     val projectListLiveData: LiveData<List<String>?> get() = _projectListLiveData
+
+    private val _currentSegment = MutableLiveData<String>()
+    val currentSegment: LiveData<String> get() = _currentSegment
 
     fun fetchUserProjectsFromRepository() {
         repository.fetchUserProjectIDs { result ->
@@ -56,11 +64,41 @@ class MainActivityViewModel @Inject constructor(
                 is ServerResult.Failure -> {
 
                     _showprogressLD.value = false
-                    _showdialogLD.value = listOf("Error", result.exception.message.toString())
+                    _showdialogLD.value = listOf("Errors", result.exception.message.toString())
 
                 }
             }
         }
     }
+
+    suspend fun getTasksinProject(
+        projectName: String,
+    ) : ServerResult<List<Task>>{
+
+        return repository.getTasksinProject(projectName)
+
+    }
+    suspend fun getTasksinProjectAccordingtoTimeStamp(
+        projectName: String,
+    ) : ServerResult<List<Task>>{
+        return repository.getTasksinProjectAccordingtoTimeStamp(projectName)
+    }
+
+    suspend fun getTagsinProjectAccordingtoTimeStamp(
+        projectName: String,
+    ) : ServerResult<List<Tag>>{
+        return repository.getTagsinProjectAccordingtoTimeStamp(projectName)
+    }
+    suspend fun getTagsinProject(
+        projectName: String,
+    ) : ServerResult<List<Tag>> {
+        return repository.getTagsinProject(projectName)
+    }
+
+    fun updateCurrentSegment(newSegment: String) {
+        _currentSegment.value = newSegment
+    }
+
+
 
 }

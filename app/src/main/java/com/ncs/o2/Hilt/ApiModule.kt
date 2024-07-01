@@ -1,8 +1,8 @@
 package com.ncs.o2.Hilt
 
-import android.app.Application
+import com.ncs.o2.Api.MailApiService
 import com.ncs.o2.BuildConfig
-import com.ncs.o2.Services.NotificationApiService
+import com.ncs.o2.Api.NotificationApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -37,9 +37,10 @@ Tasks FUTURE ADDITION :
 object ApiModule {
 
 
+
     @Provides
     @Singleton
-    fun provideOkHTTPClient():OkHttpClient{
+    fun provideOkHTTPClient(): OkHttpClient {
         val interceptor = HttpLoggingInterceptor()
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
         return OkHttpClient.Builder().addInterceptor(interceptor)
@@ -52,13 +53,25 @@ object ApiModule {
 
     @Provides
     @Singleton
-    fun getApiService (okkHttpClient: OkHttpClient): NotificationApiService {
+    fun getApiService(okkHttpClient: OkHttpClient): NotificationApiService {
         return Retrofit.Builder()
             .baseUrl(BuildConfig.FCM_BASE_URL)
             .client(okkHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(NotificationApiService::class.java)
+    }
+
+
+    @Provides
+    @Singleton
+    fun getMailApiService(okkHttpClient: OkHttpClient): MailApiService {
+        return Retrofit.Builder()
+            .baseUrl(BuildConfig.MAIL_SERVER_URL)
+            .client(okkHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(MailApiService::class.java)
     }
 
 

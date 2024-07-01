@@ -1,26 +1,57 @@
 package com.ncs.o2.Domain.Utility
 
+import android.animation.ObjectAnimator
+import android.animation.PropertyValuesHolder
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.DownloadManager
 import android.content.Context
+import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.res.Resources
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.os.SystemClock
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
+import android.view.ViewParent
+import android.view.ViewPropertyAnimator
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.view.ViewCompat
+import androidx.core.view.marginEnd
+import androidx.core.view.marginStart
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.google.android.material.snackbar.BaseTransientBottomBar.ANIMATION_MODE_SLIDE
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
+import com.ncs.o2.Domain.Utility.ExtensionsUtil.bounce
 import com.ncs.o2.R
 import timber.log.Timber
+import java.lang.ref.WeakReference
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -71,16 +102,27 @@ object ExtensionsUtil {
 
 
     fun View.progressGone(context: Context, duration: Long = 1500L) = run {
-        animFadeOut(context,duration )
+        animFadeOut(context, duration)
         visibility = View.GONE
 
     }
+
     fun View.progressVisible(context: Context, duration: Long = 1500L) = run {
         visibility = View.VISIBLE
-        animFadein(context, duration )
+        animFadein(context, duration)
     }
 
 
+    fun View.progressGoneSlide(context: Context, duration: Long = 1500L) = run {
+        animSlideUp(context, duration)
+        visibility = View.GONE
+
+    }
+
+    fun View.progressVisibleSlide(context: Context, duration: Long = 1500L) = run {
+        visibility = View.VISIBLE
+        animSlideDown(context, duration)
+    }
 
     // Toasts
 
@@ -128,7 +170,7 @@ object ExtensionsUtil {
         }
     }
 
-    fun Fragment.showKeyboard(editBox : EditText) {
+    fun Fragment.showKeyboard(editBox: EditText) {
         activity?.apply {
             val imm: InputMethodManager =
                 getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -137,7 +179,8 @@ object ExtensionsUtil {
     }
 
     fun EditText.showKeyboardB() {
-        val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputMethodManager =
+            context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         requestFocus()
         inputMethodManager.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
     }
@@ -171,6 +214,40 @@ object ExtensionsUtil {
         }
     }
 
+    /**
+     * Set Drawable to the left of EditText
+     * @param icon - Drawable to set
+     */
+    fun EditText.setDrawable(icon: Drawable) {
+        this.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null)
+    }
+
+
+    /**
+     * Function to run a delayed function
+     * @param millis - Time to delay
+     * @param function - Function to execute
+     */
+    fun runDelayed(millis: Long, function: () -> Unit) {
+        Handler(Looper.getMainLooper()).postDelayed(function, millis)
+    }
+
+    /**
+     * Show multiple views
+     */
+    fun showViews(vararg views: View) {
+        views.forEach { view -> view.visible() }
+    }
+
+
+    /**
+     * Hide multiple views
+     */
+    fun hideViews(vararg views: View) {
+        views.forEach { view -> view.gone() }
+    }
+
+
     //Date formatting
     fun String.toDate(format: String = "yyyy-MM-dd HH:mm:ss"): Date? {
         val dateFormatter = SimpleDateFormat(format, Locale.getDefault())
@@ -201,6 +278,101 @@ object ExtensionsUtil {
     }
 
 
+    fun ImageView.load(url: Any, placeholder: Drawable) {
+        Glide.with(context)
+            .setDefaultRequestOptions(RequestOptions().placeholder(placeholder))
+            .load(url)
+            .thumbnail(0.05f)
+            .error(placeholder)
+            .into(this)
+    }
+
+
+    fun isValidContext(context: Context?): Boolean {
+        if (context == null) {
+            return false
+        }
+        if (context is Activity) {
+            val activity = context as Activity
+            if (activity.isDestroyed || activity.isFinishing) {
+                return false
+            }
+        }
+        return true
+    }
+
+
+    fun ImageView.loadProfileImg(url: Any) {
+        if (isValidContext(context)) {
+
+            Glide.with(context)
+                .load(url)
+                .listener(object : RequestListener<Drawable> {
+
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        return false
+                    }
+
+                    override fun onResourceReady(
+                        resource: Drawable?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        dataSource: DataSource?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        return false
+                    }
+                })
+                .encodeQuality(80)
+                .override(40, 40)
+                .apply(
+                    RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL)
+                )
+                .error(R.drawable.profile_pic_placeholder)
+                .into(this)
+        }
+    }
+
+
+    /**
+     * Load image to ImageView
+     * @param url - Url of the image, can be Int, drawable or String
+     * @param placeholder - Placeholder to show when loading image
+     * @param thumbnail - Image thumbnail url
+     */
+    fun ImageView.load(url: Any, placeholder: Int, thumbnail: String) {
+        Glide.with(context)
+            .setDefaultRequestOptions(
+                RequestOptions()
+                    .placeholder(placeholder)
+            )
+            .load(url)
+            .thumbnail(Glide.with(context).asDrawable().load(thumbnail).thumbnail(0.1f))
+            .into(this)
+    }
+
+    /**
+     * Load image to ImageView
+     * @param url - Url of the image, can be Int, drawable or String
+     * @param placeholder - Placeholder to show when loading image
+     * @param thumbnail - Image thumbnail url
+     */
+    fun ImageView.load(url: Any, placeholder: Drawable, thumbnail: String) {
+        Glide.with(context)
+            .setDefaultRequestOptions(
+                RequestOptions()
+                    .placeholder(placeholder)
+            )
+            .load(url)
+            .thumbnail(Glide.with(context).asDrawable().load(thumbnail).thumbnail(0.1f))
+            .into(this)
+    }
+
     //Animation
     fun View.animSlideUp(context: Context, animDuration: Long = 1500L) = run {
         this.clearAnimation()
@@ -213,11 +385,52 @@ object ExtensionsUtil {
 
     fun View.animSlideDown(context: Context, animDuration: Long = 1500L) = run {
         this.clearAnimation()
-        val animation = AnimationUtils.loadAnimation(context, me.shouheng.utils.R.anim.slide_top_to_bottom)
+        val animation =
+            AnimationUtils.loadAnimation(context, me.shouheng.utils.R.anim.slide_top_to_bottom)
+                .apply {
+                    duration = animDuration
+                }
+        this.startAnimation(animation)
+        this.gone()
+    }
+
+
+    fun View.animSlideUpVisible(context: Context, animDuration: Long = 1500L) = run {
+        this.clearAnimation()
+        val animation = AnimationUtils.loadAnimation(context, R.anim.slide_bottom_to_up)
             .apply {
                 duration = animDuration
             }
         this.startAnimation(animation)
+        this.visible()
+    }
+
+    fun View.slideDownAndGone(
+        duration: Long = 300L,
+        onEndAction: (() -> Unit)? = null
+    ): ViewPropertyAnimator {
+        return animate()
+            .translationYBy(height.toFloat())
+            .setDuration(duration)
+            .setInterpolator(AccelerateDecelerateInterpolator())
+            .withEndAction {
+                visibility = View.GONE
+                onEndAction?.invoke()
+            }
+    }
+
+    fun View.slideUpAndVisible(
+        duration: Long = 300L,
+        onEndAction: (() -> Unit)? = null
+    ): ViewPropertyAnimator {
+        visibility = View.VISIBLE
+        return animate()
+            .translationYBy(-height.toFloat())
+            .setDuration(duration)
+            .setInterpolator(AccelerateDecelerateInterpolator())
+            .withEndAction {
+                onEndAction?.invoke()
+            }
     }
 
     fun View.animSlideLeft(context: Context, animDuration: Long = 1500L) = run {
@@ -257,10 +470,45 @@ object ExtensionsUtil {
         this.startAnimation(animation)
     }
 
+    fun View.set180(context: Context, animDuration: Long = 200L) {
+        clearAnimation()
+        val currentRotation = tag as? Float ?: 0f
+        val targetRotation = if (currentRotation == 0f) 180f else 0f
+        val rotationProperty =
+            PropertyValuesHolder.ofFloat(View.ROTATION, currentRotation, targetRotation)
+        val animator = ObjectAnimator.ofPropertyValuesHolder(this, rotationProperty)
+            .apply {
+                duration = animDuration
+            }
+        tag = targetRotation
+
+        animator.start()
+    }
+
 
     fun View.rotateInfinity(context: Context) = run {
         this.clearAnimation()
         val animation = AnimationUtils.loadAnimation(context, R.anim.rotateinfi)
+        this.startAnimation(animation)
+    }
+
+
+    fun View.popInfinity(context: Context) = run {
+        this.clearAnimation()
+        val animation = AnimationUtils.loadAnimation(context, R.anim.popinfi)
+        this.startAnimation(animation)
+    }
+
+
+    fun View.blink(context: Context) = run {
+        this.clearAnimation()
+        val animation = AnimationUtils.loadAnimation(context, R.anim.blink)
+        this.startAnimation(animation)
+    }
+
+    fun View.blinkinfi(context: Context) = run {
+        this.clearAnimation()
+        val animation = AnimationUtils.loadAnimation(context, R.anim.blinkinf)
         this.startAnimation(animation)
     }
 
@@ -272,10 +520,11 @@ object ExtensionsUtil {
 
     fun View.animFadeOut(context: Context, animDuration: Long = 1500L) = run {
         this.clearAnimation()
-        val animation = AnimationUtils.loadAnimation(context, androidx.appcompat.R.anim.abc_fade_out)
-            .apply {
-                duration = animDuration
-            }
+        val animation =
+            AnimationUtils.loadAnimation(context, androidx.appcompat.R.anim.abc_fade_out)
+                .apply {
+                    duration = animDuration
+                }
         this.startAnimation(animation)
 
     }
@@ -288,55 +537,148 @@ object ExtensionsUtil {
             }
         this.startAnimation(animation)
     }
-
     private const val SHORT_HAPTIC_FEEDBACK_DURATION = 5L
     fun Context.performHapticFeedback() {
         val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        val vibrationEffect = VibrationEffect.createOneShot(100L, VibrationEffect.DEFAULT_AMPLITUDE)
+        val vibrationEffect = VibrationEffect.createOneShot(5L, VibrationEffect.DEFAULT_AMPLITUDE)
+        vibrator.vibrate(vibrationEffect)
+    }
+
+    fun Context.performShakeHapticFeedback() {
+        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        val timings = longArrayOf(0, 500)
+        val amplitudes = intArrayOf(VibrationEffect.DEFAULT_AMPLITUDE, VibrationEffect.EFFECT_HEAVY_CLICK,)
+        val vibrationEffect = VibrationEffect.createWaveform(timings, amplitudes, -1)
         vibrator.vibrate(vibrationEffect)
     }
 
 
-    fun View.setOnClickThrottleBounceListener(throttleTime: Long = 600L,onClick : ()->Unit){
+
+
+
+    fun TextInputEditText.appendTextAtCursor(textToAppend: String) {
+        val start = selectionStart
+        val end = selectionEnd
+
+        val editable = text
+
+        editable?.replace(start, end, textToAppend)
+        setSelection(start + textToAppend.length)
+    }
+
+
+    fun View.setMargins(left: Int, top: Int, right: Int, bottom: Int) {
+        if (this.layoutParams is ViewGroup.MarginLayoutParams) {
+            val params = this.layoutParams as ViewGroup.MarginLayoutParams
+            params.setMargins(left, top, right, bottom);
+        }
+    }
+
+    fun TextInputEditText.appendTextAtCursorMiddleCursor(textToAppend: String, type: Int) {
+        val position = this.selectionStart
+        val text = this.text
+        val newText = StringBuilder(text).insert(position, textToAppend).toString()
+        this.setText(newText)
+        if (type == 2) this.setSelection(position + 1)
+        else this.setSelection(position + 2)
+    }
+
+
+    fun View.setOnClickThrottleBounceListener(throttleTime: Long = 600L, onClick: () -> Unit) {
 
         this.setOnClickListener(object : View.OnClickListener {
 
             private var lastClickTime: Long = 0
             override fun onClick(v: View) {
-                v.bounce(context)
-                if (SystemClock.elapsedRealtime() - lastClickTime < throttleTime) return
-                else onClick()
-                lastClickTime = SystemClock.elapsedRealtime()
+                context?.let {
+                    v.bounce(context)
+                    if (SystemClock.elapsedRealtime() - lastClickTime < throttleTime) return
+                    else onClick()
+                    lastClickTime = SystemClock.elapsedRealtime()
+                }
+
             }
         })
+    }
+
+    fun View.setOnDoubleClickListener(listener: () -> Unit) {
+        val doubleClickInterval = 500 // Adjust this value as needed (in milliseconds)
+        var lastClickTime: Long = 0
+
+        this.setOnClickListener { view ->
+            view.bounce(context)
+            val clickTime = SystemClock.uptimeMillis()
+            if (clickTime - lastClickTime < doubleClickInterval) {
+                // Double click detected
+                context?.let {
+                    context.performHapticFeedback()
+                    listener.invoke()
+                }
+
+            }
+
+            lastClickTime = clickTime
+        }
     }
 
 
 
 
-    fun View.setOnClickSingleTimeBounceListener(onClick : ()->Unit){
+
+    fun deleteDownloadedFile(downloadID : Long, context: Context) {
+        val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        downloadManager.remove(downloadID)
+    }
+
+    fun getVersionName(context: Context): String? {
+        return try {
+            val packageInfo: PackageInfo =
+                context.packageManager.getPackageInfo(context.packageName, 0)
+            packageInfo.versionName
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    fun String.isGreaterThanVersion(otherVersion: String): Boolean {
+        val thisParts = this.split(".").map { it.toInt() }
+        val otherParts = otherVersion.split(".").map { it.toInt() }
+
+        for (i in 0 until maxOf(thisParts.size, otherParts.size)) {
+            val thisPart = thisParts.getOrNull(i) ?: 0
+            val otherPart = otherParts.getOrNull(i) ?: 0
+
+            if (thisPart != otherPart) {
+                return thisPart > otherPart
+            }
+        }
+
+        return false
+    }
+
+
+    fun View.setOnClickSingleTimeBounceListener(onClick: () -> Unit) {
 
         this.setOnClickListener(object : View.OnClickListener {
-            private var clicked : Boolean = false
+            private var clicked: Boolean = false
             override fun onClick(v: View) {
-                context.performHapticFeedback()
+                //context.performHapticFeedback()
                 v.bounce(context)
                 if (clicked) return
                 else onClick()
                 clicked = true
             }
         })
-   }
+    }
 
-    inline fun View.setOnClickFadeInListener(crossinline onClick : ()->Unit){
-        setOnClickListener{
-            context.performHapticFeedback()
-            it.animFadein(context,100)
+    inline fun View.setOnClickFadeInListener(crossinline onClick: () -> Unit) {
+        setOnClickListener {
+            // context.performHapticFeedback()
+            it.animFadein(context, 100)
             onClick()
         }
     }
-
-
 
 
     fun View.setSingleClickListener(throttleTime: Long = 600L, action: () -> Unit) {
@@ -351,4 +693,18 @@ object ExtensionsUtil {
         })
     }
 
+
+    fun View.setBackgroundColorRes(colorResId: Int) {
+        val color = context.resources.getColor(colorResId)
+        setBackgroundColor(color)
+    }
+
+    fun View.setBackgroundColor(color: Int) {
+        background = ColorDrawable(color)
+    }
+
+    fun View.setBackgroundDrawable(drawable: Drawable) {
+        background = drawable
+    }
 }
+

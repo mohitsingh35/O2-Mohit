@@ -3,21 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer"
+    android:background="@color/primary_bg"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:openDrawer="start">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/cl_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
             android:orientation="vertical">
 
             <include
@@ -33,21 +33,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <include
-                    layout="@layout/circular_progress"
-                    android:id="@+id/lottie_progress_include"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:elevation="10dp"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="10dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/progressBar"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.498"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="1.0"
-                    />
 
                 <androidx.fragment.app.FragmentContainerView
                     android:id="@+id/nav_host_fragment_activity_main"
@@ -55,10 +40,37 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:defaultNavHost="true"
+                    android:background="@color/secondary_bg"
+                    android:visibility="visible"
                     app:navGraph="@navigation/nav_graph" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textAlignment="center"
+                    android:padding="10dp"
+                    android:visibility="gone"
+                    android:id="@+id/placeholder_text"
+                    android:text="Select a segment\n to continue"
+                    android:fontFamily="@font/sf_pro_display_semibold"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:textSize="30dp"
+                    android:textColor="@color/edit_text_hint"/>
 
-
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textAlignment="center"
+                    android:padding="10dp"
+                    android:visibility="gone"
+                    android:id="@+id/project_placeholder"
+                    android:text="Join / Select a project to continue"
+                    android:fontFamily="@font/sf_pro_display_semibold"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:textSize="20dp"
+                    android:textColor="@color/edit_text_hint"/>
 
             </FrameLayout>
 
@@ -67,22 +79,37 @@
 
 
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_nav"
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="55dp"
+            android:id="@+id/bottomNavParent"
             android:layout_gravity="bottom"
-            android:background="@color/darkbg_main"
-            android:elevation="8dp"
-            app:labelVisibilityMode="unlabeled"
-            android:padding="5dp"
-            app:itemIconSize="25sp"
-            app:itemActiveIndicatorStyle="@color/primary"
-            app:itemIconTint="@drawable/itembg"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:menu="@menu/bottom_navigation_menu" />
+            android:orientation="vertical"
+            >
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#1D7D7D7D"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
+
+
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/bottom_nav"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:background="@color/primary_bg"
+                android:elevation="8dp"
+                app:labelVisibilityMode="unlabeled"
+                android:padding="5dp"
+                app:itemIconSize="25sp"
+                app:itemActiveIndicatorStyle="@color/primary"
+                app:itemIconTint="@drawable/itembg"
+                app:itemRippleColor="@color/dim_primary"
+                app:menu="@menu/bottom_navigation_menu" />
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
         <include
             android:id="@+id/progress_include"
@@ -102,7 +129,7 @@
         android:layout_width="340dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/secondary_bg_black"
+        android:background="@color/secondary_bg_lighter"
         app:headerLayout="@layout/drawer_header">
 
         <LinearLayout

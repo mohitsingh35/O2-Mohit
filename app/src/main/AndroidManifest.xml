@@ -2,52 +2,146 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-feature
+        android:name="android.hardware.sensor.accelerometer"
+        android:required="true" />
+
     <application
         android:name=".O2Application"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/app_icon"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/app_icon_round"
-        android:supportsRtl="true"
         android:theme="@style/O2SplashTheme"
+        android:windowSoftInputMode="adjustResize"
         tools:targetApi="31">
         <activity
+            android:name=".UI.Tasks.TaskPage.ArchivedTasksActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.Assigned.TodayActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.Report.ImageViewActivity"
+            android:exported="false"
+            android:label="@string/title_activity_image_view"
+            android:theme="@style/O2SplashTheme" />
+        <activity
+            android:name=".UI.Report.ShakeDetectedActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.Teams.TeamsViewerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.Teams.TasksHolderActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.Teams.ChannelHolderActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.Logs.LogsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.UpdateScreen.UpdaterActivity"
+            android:exported="true" />
+        <activity
+            android:name=".UI.CreateTask.ChecklistActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.Setting.SettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.NewChanges"
+            android:exported="false" />
+        <activity
+            android:name=".UI.CreateTask.DescriptionEditorActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.Tasks.TaskPage.Details.ImageViewerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.Tasks.TaskPage.Details.CodeViewerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.UIComponents.BottomSheets.sectionDisplayBottomSheet"
+            android:exported="false" />
+        <activity
+            android:name=".UI.StartScreen.MaintainanceScreen"
+            android:exported="false" />
+        <activity
+            android:name=".UI.EditProfile.EditProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.Testing.TestingActivity"
+            android:exported="false" />
+        <activity
             android:name=".UI.Auth.AuthScreenActivity"
-            android:exported="true" >
+            android:exported="true" />
 
+        <receiver
+            android:name=".HelperClasses.NetworkChangeReceiver"
+            android:exported="true"
+            android:label="NetworkChangeReceiver">
+            <intent-filter>
+                <action
+                    android:name="android.net.conn.CONNECTIVITY_CHANGE"
+                    tools:ignore="BatteryLife" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".UI.StartScreen.StartScreen"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-
-        <activity
-            android:name=".UI.UIComponents.SplashScreen"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:exported="true" />
         <activity
             android:name=".UI.CreateTask.CreateTaskActivity"
             android:exported="false" />
         <activity
-            android:name=".UI.Notifications.Requests.RequestActivity"
+            android:name=".UI.createProject.CreateProjectActivity"
             android:exported="false" />
         <activity
             android:name=".UI.Notifications.NotificationsActivity"
             android:exported="false" />
         <activity
-            android:name=".UI.Tasks.TaskDetails.TaskDetailActivity"
+            android:name=".UI.Tasks.TaskPage.TaskDetailActivity"
             android:exported="false" />
         <activity
             android:name=".UI.MainActivity"
             android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="oxgn.page.link" />
+                <data android:scheme="https" />
+                <data android:host="oxy2.page.link" />
+            </intent-filter>
         </activity>
 
         <service
@@ -67,6 +161,15 @@
                 android:name="androidx.work.WorkManagerInitializer"
                 android:value="androidx.startup"
                 tools:node="remove" />
+        </provider>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
         </provider>
     </application>
 

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">O2</string>
+    <string name="app_name">Oxygen</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -9,6 +9,7 @@
 
     <string name="bottom_nav_item_assigned">Assigned</string>
     <string name="bottom_nav_item_done">Completed</string>
+    <string name="bottom_nav_search">Search</string>
     <string name="new_task">New Task</string>
     <string name="select_members">Select Members</string>
     <string name="select_segment">Select Segment</string>
@@ -60,11 +61,125 @@
     <string name="details_user">Details</string>
     <string name="next">Next</string>
     <string name="designation">Designation</string>
+    <string name="username">Username</string>
     <string name="organisation">Organisation</string>
     <string name="set_profile_picture">Set profile picture</string>
     <string name="hold_on">Hold on...</string>
     <string name="register">Register</string>
     <string name="login">Login</string>
+    <string name="retry">Retry</string>
+    <string name="cancel">Cancel</string>
+    <string name="no_current_tasks_here">No tasks yet in this section...</string>
+
+    <!--    Choose designation bottomSheet and edit profile-->
+
+    <string name="backend_developer">Backend developer</string>
+    <string name="programmer">Programmer</string>
+    <string name="android_developer">Android developer</string>
+    <string name="designer">Designer</string>
+    <string name="web_developer">Web developer</string>
+    <string name="edit">Edit</string>
+    <string name="choose_designation">Choose Designation</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="submit">Submit</string>
+    <string name="paste_project_link_here">*Paste project link here</string>
+    <string name="add_project">Add Project</string>
+    <string name="sections">Sections</string>
+    <string name="total_sections">Total Sections</string>
+    <string name="create_a_segment">Create a Segment +</string>
+    <string name="segment_title">Segment title</string>
+    <string name="segment_description">Segment Description</string>
+    <string name="set_description_here">Set Description here...</string>
+    <string name="section">Section</string>
+    <string name="segment">Segment</string>
+    <string name="bottom_nav_project">Project</string>
+    <string name="status">Status</string>
+    <string name="state">State</string>
+    <string name="type">Type</string>
+    <string name="difficulty">Difficulty</string>
+
+    <string name="shared_image_transition">shared_image_transition_%1$d</string>
+    <string name="max_zoom">Max Zoom : %1$f</string>
+    <string name="fling_animation_duration">Fling Animation Duration : %1$d</string>
+    <string name="scale_animation_duration">Scale Animation Duration : %1$d</string>
+    <string name="over_scale_animation_duration">Over Scale Animation Duration : %1$d</string>
+    <string name="over_scroll_animation_duration">Over Scroll Animation Duration : %1$d</string>
+    <string name="dismiss_animation_duration">Dismiss Animation Duration : %1$d</string>
+    <string name="restore_animation_duration">Restore Animation Duration : %1$d</string>
+    <string name="view_drag_friction">View Drag Friction : %1$f</string>
+    <string name="moderators">Moderators</string>
+    <string name="state_filter">State</string>
+    <string name="assignee_filter">Assignee</string>
+    <string name="segment_filter">Segment</string>
+    <string name="type_filter">Type</string>
+    <string name="clear_filters">Clear filters</string>
+    <string name="summary">Summary</string>
+    <string name="create_task">Create Task</string>
+    <string name="summary_title">Summary</string>
+    <string name="rationale_ask_permission">O2 requires permissions to install update packages, please allow to proceed...</string>
+    <string name="yes">Yes</string>
+    <string name="allow_o2_to_install_updates">Allow Install</string>
+    <string name="o2_requires_install_package_permission_to_install_the_updates_please_allow_to_proceed_with_update">O2 requires `Install Package` permission to install the updates, please allow to proceed with the update.</string>
+    <string name="proceed">Proceed</string>
+    <string name="a_new_version_of_o2_has_been_released_proceed_to_install">A new version of O2 has been released, proceed to install.</string>
+    <string name="new_update">New Update 🚀</string>
+    <string name="title_activity_image_view">ImageViewActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="previous">Previous</string>
+
+    <string name="lorem_ipsum">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
+        volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
+        dui nec risus. Maecenas non sodales nisi, vel dictum dolor. Class aptent taciti sociosqu ad
+        litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse blandit eleifend
+        diam, vel rutrum tellus vulputate quis. Aliquam eget libero aliquet, imperdiet nisl a,
+        ornare ex. Sed rhoncus est ut libero porta lobortis. Fusce in dictum tellus.\n\n
+        Suspendisse interdum ornare ante. Aliquam nec cursus lorem. Morbi id magna felis. Vivamus
+        egestas, est a condimentum egestas, turpis nisl iaculis ipsum, in dictum tellus dolor sed
+        neque. Morbi tellus erat, dapibus ut sem a, iaculis tincidunt dui. Interdum et malesuada
+        fames ac ante ipsum primis in faucibus. Curabitur et eros porttitor, ultricies urna vitae,
+        molestie nibh. Phasellus at commodo eros, non aliquet metus. Sed maximus nisl nec dolor
+        bibendum, vel congue leo egestas.\n\n
+        Sed interdum tortor nibh, in sagittis risus mollis quis. Curabitur mi odio, condimentum sit
+        amet auctor at, mollis non turpis. Nullam pretium libero vestibulum, finibus orci vel,
+        molestie quam. Fusce blandit tincidunt nulla, quis sollicitudin libero facilisis et. Integer
+        interdum nunc ligula, et fermentum metus hendrerit id. Vestibulum lectus felis, dictum at
+        lacinia sit amet, tristique id quam. Cras eu consequat dui. Suspendisse sodales nunc ligula,
+        in lobortis sem porta sed. Integer id ultrices magna, in luctus elit. Sed a pellentesque
+        est.\n\n
+        Aenean nunc velit, lacinia sed dolor sed, ultrices viverra nulla. Etiam a venenatis nibh.
+        Morbi laoreet, tortor sed facilisis varius, nibh orci rhoncus nulla, id elementum leo dui
+        non lorem. Nam mollis ipsum quis auctor varius. Quisque elementum eu libero sed commodo. In
+        eros nisl, imperdiet vel imperdiet et, scelerisque a mauris. Pellentesque varius ex nunc,
+        quis imperdiet eros placerat ac. Duis finibus orci et est auctor tincidunt. Sed non viverra
+        ipsum. Nunc quis augue egestas, cursus lorem at, molestie sem. Morbi a consectetur ipsum, a
+        placerat diam. Etiam vulputate dignissim convallis. Integer faucibus mauris sit amet finibus
+        convallis.\n\n
+        Phasellus in aliquet mi. Pellentesque habitant morbi tristique senectus et netus et
+        malesuada fames ac turpis egestas. In volutpat arcu ut felis sagittis, in finibus massa
+        gravida. Pellentesque id tellus orci. Integer dictum, lorem sed efficitur ullamcorper,
+        libero justo consectetur ipsum, in mollis nisl ex sed nisl. Donec maximus ullamcorper
+        sodales. Praesent bibendum rhoncus tellus nec feugiat. In a ornare nulla. Donec rhoncus
+        libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
+        vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
+    </string>
+    <string name="this_alias_is_already_in_use">This Alias is already in use</string>
+    <string name="this_alias_is_available">This Alias is available</string>
+    <string name="should_be_2_to_4_characters_long">Should be 2 to 4 characters long</string>
+    <string name="only_alphanumeric_characters_allowed">Only Alphanumeric characters allowed</string>
+    <string name="emojis_are_not_allowed">Emojis are not allowed</string>
+    <string name="cannot_start_with_a_number">Cannot start with a number</string>
+    <string name="should_contain_at_least_2_alphabetical_characters">Should contain at least 2 alphabetical characters</string>
+    <string name="spaces_not_allowed_in_starting">Spaces not allowed in starting</string>
+    <string name="title_cannot_be_empty">Title cannot be empty</string>
+    <string name="workspace">Workspace</string>
+    <string name="search">Search</string>
+    <string name="invalid_input">Invalid Input</string>
+    <string name="insufficient_permission_for_your_role_to_create_segment">Insufficient permission for your role to create segment</string>
+    <string name="segments_creation_is_not_allowed_in_offline_mode">Segments creation is not allowed in offline mode</string>
+    <string name="add_a_project">Add a project</string>
 
 
 </resources>

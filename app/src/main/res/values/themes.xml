@@ -1,8 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.O2" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="android:statusBarColor">@color/darkbg_main</item>
-        <item name="android:navigationBarColor">@color/darkbg_main</item>
+        <item name="android:statusBarColor">@color/primary_bg</item>
+        <item name="android:navigationBarColor">@color/primary_bg</item>
     </style>
 
     <style name="Theme.O2" parent="Base.Theme.O2" />
@@ -12,17 +12,29 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">#000000</item>
-        <item name="android:statusBarColor">#000000</item>
+        <item name="android:statusBarColor">@color/primary_bg</item>
+        <item name="android:navigationBarColor">@color/primary_bg</item>
     </style>
 
     <style name="CustomTabLayout" parent="Widget.Design.TabLayout">
         <item name="tabTextAppearance">@style/CustomTabTextAppearance</item>
     </style>
 
-    <style name="CustomTabTextAppearance" parent="TextAppearance.Design.Tab">
-        <item name="android:textSize">13sp</item>
-        <item name="android:fontFamily">@font/outfitbold</item>
-        <item name="textAllCaps">true</item>
+    <style name="CustomTabLayout2" parent="Widget.Design.TabLayout">
+        <item name="tabMode">auto</item>
+        <item name="tabTextAppearance">@style/CustomTabTextAppearance</item>
     </style>
+
+    <style name="CustomTabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">15sp</item>
+        <item name="android:fontFamily">@font/sf_pro_display_semibold</item>
+        <item name="textAllCaps">false</item>
+    </style>
+    <!-- Base application theme. -->
+    <style name="Base.O2SplashTheme" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
 
 </resources>
